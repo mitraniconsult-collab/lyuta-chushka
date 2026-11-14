@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+jinja2
+python-multipart
+itsdangerous
+nh3
+feedparser
+httpx
+anthropic
+psycopg2-binary

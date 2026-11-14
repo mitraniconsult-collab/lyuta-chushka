@@ -1,0 +1,25 @@
+{% macro thumb(a) %}
+<div class="thumb {{ '' if a.image_url else 'ph' }}">{% if a.image_url %}<img src="{{ a.image_url }}" alt="{{ a.title }}" loading="lazy">{% endif %}</div>
+{% endmacro %}
+
+{% macro card(a) %}
+<a class="card" href="/{{ a.category }}/{{ a.slug }}">
+  {{ thumb(a) }}
+  <div class="body">
+    <div class="kicker">{{ CATEGORIES[a.category] }}</div>
+    <h3>{{ a.title }}</h3>
+    <p>{{ a.summary }}</p>
+    <div class="meta" style="margin-top:10px">{{ a.published_at | bg_date }}</div>
+  </div>
+</a>
+{% endmacro %}
+
+{% macro mini(a) %}
+<a class="mini" href="/{{ a.category }}/{{ a.slug }}">
+  {{ thumb(a) }}
+  <div>
+    <div class="kicker">{{ CATEGORIES[a.category] }}</div>
+    <h3>{{ a.title }}</h3>
+  </div>
+</a>
+{% endmacro %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card %}
+{% block title %}{{ CATEGORIES[category] }} — {{ config.SITE_NAME }}{% endblock %}
+{% block content %}
+<h1 class="section-title" style="font-size:32px">{{ CATEGORIES[category] }}</h1>
+<div class="grid c3">
+  {% for a in items %}{{ card(a) }}{% endfor %}
+</div>
+{% if not items %}<p class="meta">В тази рубрика още няма материали.</p>{% endif %}
+{% endblock %}

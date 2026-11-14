@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card, thumb %}
+{% block title %}{{ a.title }} — {{ config.SITE_NAME }}{% endblock %}
+{% block desc %}{{ a.summary }}{% endblock %}
+{% block og %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ a.title }}">
+<meta property="og:description" content="{{ a.summary }}">
+{% if a.image_url %}<meta property="og:image" content="{{ a.image_url }}">{% endif %}
+<link rel="canonical" href="{{ config.SITE_URL }}/{{ a.category }}/{{ a.slug }}">
+{% endblock %}
+
+{% block content %}
+{% set category = a.category %}
+<article class="article">
+  <a class="kicker" href="/{{ a.category }}">{{ CATEGORIES[a.category] }}</a>
+  <h1>{{ a.title }}</h1>
+  <p class="lead">{{ a.summary }}</p>
+  <div class="meta">{{ a.published_at | bg_date }}</div>
+
+  {% if a.image_url %}
+  <div class="thumb"><img src="{{ a.image_url }}" alt="{{ a.title }}"></div>
+  {% if a.image_credit %}<div class="credit">Снимка: {{ a.image_credit }}</div>{% endif %}
+  {% endif %}
+
+  {% if a.ai_generated %}
+  <div class="ai-note {{ 'ok' if a.human_reviewed else '' }}">
+    {{ config.REVIEWED_LABEL if a.human_reviewed else config.AI_LABEL }}
+  </div>
+  {% endif %}
+
+  <div class="content">{{ a.body | clean_html | safe }}</div>
+
+  {% if a.source_list %}
+  <div class="sources">
+    <h4>Източници</h4>
+    <ul>
+      {% for s in a.source_list %}
+      <li><a href="{{ s.url }}" rel="nofollow noopener" target="_blank">{{ s.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <p class="reply-right">Засегнати от публикацията? Имате право на отговор и на корекция. Пишете на <a href="mailto:{{ config.CONTACT_EMAIL }}">{{ config.CONTACT_EMAIL }}</a>. Отговаряме до 24 часа.</p>
+</article>
+
+{% if more %}
+<h2 class="section-title">Още от рубриката</h2>
+<div class="grid c3">{% for m in more %}{{ card(m) }}{% endfor %}</div>
+{% endif %}
+{% endblock %}

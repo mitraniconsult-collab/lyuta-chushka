@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card, mini, thumb %}
+
+{% block ticker %}
+{% if hero %}
+<div class="ticker"><div class="wrap"><span class="tag-hot">Горещо</span><span>{{ hero.title }}</span></div></div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if not hero %}
+<div class="page"><h1>Скоро тук</h1><p>Все още няма публикувани материали.</p></div>
+{% else %}
+<section class="hero">
+  <a class="hero-main" href="/{{ hero.category }}/{{ hero.slug }}">
+    {{ thumb(hero) }}
+    <div class="over">
+      <div class="kicker">{{ CATEGORIES[hero.category] }}</div>
+      <h1>{{ hero.title }}</h1>
+      <p>{{ hero.summary }}</p>
+    </div>
+  </a>
+  <div class="hero-side">
+    {% for a in side %}{{ mini(a) }}{% endfor %}
+  </div>
+</section>
+
+<div class="layout">
+  <div>
+    <h2 class="section-title">Най-новото</h2>
+    <div class="grid c2">
+      {% for a in rest %}{{ card(a) }}{% endfor %}
+    </div>
+    {% if not rest %}<p class="meta">Скоро ще има още материали.</p>{% endif %}
+  </div>
+  <aside>
+    <h2 class="section-title">Най-четено</h2>
+    <div class="popular"><ol>
+      {% for a in popular %}<li><a href="/{{ a.category }}/{{ a.slug }}">{{ a.title }}</a></li>{% endfor %}
+    </ol></div>
+  </aside>
+</div>
+{% endif %}
+{% endblock %}

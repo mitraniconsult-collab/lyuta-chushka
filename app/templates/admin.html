@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Админ — {{ config.SITE_NAME }}{% endblock %}
+{% block content %}
+<div class="admin" style="margin-top:24px">
+  <div class="row between">
+    <h1 style="font-size:32px">Опашка за одобрение</h1>
+    <form method="post" action="/admin/logout"><button class="btn gray small">Изход</button></form>
+  </div>
+  {% if msg %}<div class="flash">{{ msg }}</div>{% endif %}
+
+  <h2 class="section-title">Чакат преглед ({{ pending|length }})</h2>
+  {% for a in pending %}
+  <div class="panel">
+    <div class="row between">
+      <div>
+        <span class="badge {{ 'red' if a.risk_level == 'high' else '' }}">риск: {{ a.risk_level }}</span>
+        <span class="badge">{{ CATEGORIES[a.category] }}</span>
+      </div>
+      <a class="btn small" href="/admin/article/{{ a.id }}">Прегледай</a>
+    </div>
+    <h3 style="margin:10px 0 6px">{{ a.title }}</h3>
+    <div class="meta">{{ a.risk_reasons or 'без забележки' }}</div>
+  </div>
+  {% else %}
+  <p class="meta">Няма чакащи материали.</p>
+  {% endfor %}
+
+  <h2 class="section-title">Нов материал от факти</h2>
+  <form class="panel" method="post" action="/admin/generate">
+    <label>Факти (само проверени, с цифри и дати)</label>
+    <textarea name="facts" rows="6" required></textarea>
+    <label>Източници (по един на ред: Заглавие | https://адрес)</label>
+    <textarea name="sources" rows="3"></textarea>
+    <label>Рубрика</label>
+    <select name="category">{% for slug, name in CATEGORIES.items() %}<option value="{{ slug }}">{{ name }}</option>{% endfor %}</select>
+    <p><button class="btn" type="submit">Генерирай чернова</button></p>
+  </form>
+
+  <h2 class="section-title">Сигнали ({{ signals|length }})</h2>
+  <div class="panel">
+    <table>
+      {% for s in signals %}
+      <tr>
+        <td>{{ s.title }}<div class="meta">{{ s.feed }}</div></td>
+        <td style="width:90px"><form method="post" action="/admin/signal/{{ s.id }}/dismiss"><button class="btn gray small">Скрий</button></form></td>
+      </tr>
+      {% else %}
+      <tr><td class="meta">Няма нови сигнали. Добавете емисии в app/pipeline/ingest.py.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <h2 class="section-title">Последни</h2>
+  <div class="panel">
+    <table>
+      {% for a in recent %}
+      <tr>
+        <td><a href="/admin/article/{{ a.id }}">{{ a.title }}</a></td>
+        <td><span class="badge {{ 'red' if a.status == 'rejected' else '' }}">{{ a.status }}</span></td>
+        <td class="meta">риск: {{ a.risk_level }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

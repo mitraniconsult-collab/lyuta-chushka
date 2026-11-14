@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.SITE_NAME }} — {{ config.SITE_TAGLINE }}{% endblock %}</title>
+  <meta name="description" content="{% block desc %}{{ config.SITE_TAGLINE }}{% endblock %}">
+  {% block og %}{% endblock %}
+  <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="{{ config.SITE_NAME }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="topbar"></div>
+<header class="header">
+  <div class="wrap">
+    <a class="logo" href="/">{{ config.SITE_NAME.split(' ')[0] }} <b>{{ config.SITE_NAME.split(' ')[1:] | join(' ') }}</b><small>{{ config.SITE_TAGLINE }}</small></a>
+    <nav class="nav">
+      {% for slug, name in CATEGORIES.items() %}
+      <a href="/{{ slug }}" class="{{ 'on' if category is defined and category == slug else '' }}">{{ name }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+</header>
+{% block ticker %}{% endblock %}
+<main class="wrap">
+{% block content %}{% endblock %}
+</main>
+<footer class="footer">
+  <div class="wrap cols">
+    <div>
+      <div class="logo">{{ config.SITE_NAME }}</div>
+      <div>{{ config.SITE_TAGLINE }}. Част от автоматизирана медийна мрежа.</div>
+    </div>
+    <div>
+      <div><a href="/redakciya">Редакция и контакти</a></div>
+      <div><a href="/redakciya#otgovor">Право на отговор</a></div>
+      <div><a href="/rss.xml">RSS</a></div>
+    </div>
+    <div>
+      <div>Отговорен редактор:<br>{{ config.EDITOR_NAME }}</div>
+      <div style="margin-top:8px">© {{ now().year }} {{ config.SITE_NAME }}</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
