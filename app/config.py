@@ -7,8 +7,9 @@ EDITOR_NAME = os.getenv("EDITOR_NAME", "Име на отговорния ред�
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "redakciq@example.bg")
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./site.db")
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+for _prefix in ("postgres://", "postgresql://"):
+    if DATABASE_URL.startswith(_prefix):
+        DATABASE_URL = "postgresql+psycopg2://" + DATABASE_URL[len(_prefix):]
 SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
 
